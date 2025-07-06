@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_HUB_USERNAME = 'amradel2002'
+        IMAGE_NAME = "${amradel2002}/auth-service:latest"
+    }
+
+    stages {
+        stage('Build Docker') {
+            steps {
+                dir('auth-service') {
+                    sh 'docker build -t ${amradel2002/auth-services} .'
+                }
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh 'echo $PASS | docker login -u $USER --password-stdin'
+                    sh 'docker push ${amradel2002/auth-services}'
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh 'kubectl apply -f auth-service/auth-deployment.yaml'
+                sh 'kubectl apply -f auth-service/auth-service.yaml'
+            }
+        }
+    }
+}
+

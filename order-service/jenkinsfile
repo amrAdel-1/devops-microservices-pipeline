@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_HUB_USERNAME = 'amradel2002'
+        IMAGE_NAME = "${amradel2002}/order-service:latest"
+    }
+
+    stages {
+        stage('Build Docker Image') {
+            steps {
+                dir('order-service') {
+                    sh 'docker build -t ${amradel2002/order-service:latest} .'
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh 'echo $PASS | docker login -u $USER --password-stdin'
+                    sh 'docker push ${amradel2002/order-service:latest}'
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh 'kubectl apply -f order-service/order-deployment.yaml'
+                sh 'kubectl apply -f order-service/order-service.yaml'
+            }
+        }
+    }
+}
