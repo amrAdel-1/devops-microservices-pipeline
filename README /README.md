@@ -41,7 +41,7 @@ Each service has:
 2. Navigate into each service and build image manually:
 
 ```bash
-docker build -t <your-dockerhub-username>/auth-service:latest auth-service/
-docker push <your-dockerhub-username>/auth-service:latest
+docker build -t <amradel2002>/auth-service:latest auth-service/
+docker push <amradel2002>/auth-service:latest
 kubectl apply -f auth-service/auth-deployment.yaml
 kubectl apply -f auth-service/auth-service.yaml
