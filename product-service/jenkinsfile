@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_HUB_USERNAME = 'amradel2002'
-        IMAGE_NAME = "${amradel2002}/product-service:latest"
+        IMAGE_NAME = "${DOCKER_HUB_USERNAME}/product-service:latest"
     }
 
     stages {
